@@ -96,6 +96,36 @@ public class ComponentService {
         return mapToDto(component);
     }
 
-        //Searching pending
 
+    //Search By name
+    public List<ComponentResponse> searchByName(String name){
+        return componentRepo.searchByName(name).stream().map(this::mapToDto).toList();
+    }
+
+    public List<ComponentResponse> searchByDescription(String description){
+        return componentRepo.searchByDescription(description).stream().map(this::mapToDto).toList();
+    }
+
+    public List<ComponentResponse> searchByTechnology(String tech) {
+        return componentRepo.searchByTechnology(tech).stream().map(this::mapToDto).toList();
+    }
+
+    public List<ComponentResponse> searchByTag(String tag) {
+        return componentRepo.searchByTag(tag).stream().map(this::mapToDto).toList();
+    }
+
+    public List<ComponentResponse> globalSearch(String query) {
+        return componentRepo.globalSearch(query).stream().map(this::mapToDto).toList();
+    }
+
+    public void enableComponent(Long id) {
+        Component component = componentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Component not found"));
+        component.setEnabled(true);
+        componentRepo.save(component);
+    }
+
+    public List<ComponentResponse> getDisabledComponents() {
+        return componentRepo.findDisabledComponents().stream().map(this::mapToDto).toList();
+    }
 }

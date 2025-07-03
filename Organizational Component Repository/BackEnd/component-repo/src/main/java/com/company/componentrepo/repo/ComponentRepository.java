@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -40,9 +41,7 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
     List<Component> globalSearch(@Param("query") String query);
 
 
-
-
-
-
+    @Query("SELECT c FROM Component c WHERE c.enabled = false")
+    List<Component> findDisabledComponents();
 
 }
