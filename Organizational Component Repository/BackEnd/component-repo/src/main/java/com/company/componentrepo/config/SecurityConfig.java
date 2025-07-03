@@ -1,7 +1,9 @@
 package com.company.componentrepo.config;
 
 import com.company.componentrepo.jwt.JwtFilter;
+import com.company.componentrepo.jwt.RateLimitingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,5 +63,15 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
     }
+
+    @Bean
+    public FilterRegistrationBean<RateLimitingFilter> rateLimiterFilter() {
+        FilterRegistrationBean<RateLimitingFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new RateLimitingFilter());
+        registration.addUrlPatterns("/components/*");
+        registration.setOrder(1);
+        return registration;
+    }
+
 
 }
