@@ -1,5 +1,6 @@
 package com.company.componentrepo.controller;
 
+import com.company.componentrepo.dto.ApiResponse;
 import com.company.componentrepo.dto.ComponentRequest;
 import com.company.componentrepo.dto.ComponentResponse;
 import com.company.componentrepo.service.ComponentService;
@@ -21,7 +22,7 @@ public class ComponentController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ComponentResponse> createComponent(@RequestBody ComponentRequest request) {
         ComponentResponse response = componentService.createComponent(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Component created successfully", response).getData());
     }
 
     @PutMapping("/update/{id}")
@@ -35,16 +36,16 @@ public class ComponentController {
 
     @PutMapping("/disable/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> disableComponent(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> disableComponent(@PathVariable Long id) {
         componentService.disableComponent(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Component disabled successfully", null));
     }
 
     @PutMapping("/enable/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> enableComponent(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> enableComponent(@PathVariable Long id) {
         componentService.enableComponent(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Component Enables successFully", null));
     }
 
     @GetMapping("/{id}")

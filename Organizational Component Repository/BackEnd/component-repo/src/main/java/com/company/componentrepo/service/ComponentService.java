@@ -4,6 +4,7 @@ import com.company.componentrepo.dto.ComponentRequest;
 import com.company.componentrepo.dto.ComponentResponse;
 import com.company.componentrepo.entity.Component;
 import com.company.componentrepo.entity.Tag;
+import com.company.componentrepo.exception.DuplicateResourceException;
 import com.company.componentrepo.repo.ComponentRepository;
 import com.company.componentrepo.repo.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ComponentService {
 
     //Add new Component
     public ComponentResponse createComponent(ComponentRequest request){
+        if (componentRepo.existsByNameIgnoreCase(request.name())) {
+            throw new DuplicateResourceException("Component with the same name already exists.");
+        }
         Component component = new Component();
         component.setName(request.name());
         component.setDescription(request.description());
@@ -85,6 +89,8 @@ public class ComponentService {
     public void disableComponent(Long id) {
         Component component = componentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Component not found"));
+        if(component.isEnabled() == false)
+            return;
         component.setEnabled(false);
         componentRepo.save(component);
     }

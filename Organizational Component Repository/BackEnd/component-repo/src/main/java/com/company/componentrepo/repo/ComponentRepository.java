@@ -44,4 +44,6 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
     @Query("SELECT c FROM Component c WHERE c.enabled = false")
     List<Component> findDisabledComponents();
 
+    boolean existsByNameIgnoreCase(String name);
+
 }
