@@ -89,8 +89,9 @@ public class ComponentService {
     public void disableComponent(Long id) {
         Component component = componentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Component not found"));
-        if(component.isEnabled() == false)
-            return;
+        if(!component.isEnabled())
+            throw new IllegalStateException("Component is already disabled.");
+
         component.setEnabled(false);
         componentRepo.save(component);
     }
@@ -127,6 +128,10 @@ public class ComponentService {
     public void enableComponent(Long id) {
         Component component = componentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Component not found"));
+
+        if(component.isEnabled())
+            throw new IllegalStateException("Component is already Enabled.");
+
         component.setEnabled(true);
         componentRepo.save(component);
     }

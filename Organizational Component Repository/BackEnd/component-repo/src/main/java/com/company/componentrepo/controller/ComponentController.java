@@ -4,6 +4,7 @@ import com.company.componentrepo.dto.ApiResponse;
 import com.company.componentrepo.dto.ComponentRequest;
 import com.company.componentrepo.dto.ComponentResponse;
 import com.company.componentrepo.service.ComponentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ public class ComponentController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ComponentResponse> createComponent(@RequestBody ComponentRequest request) {
+    public ResponseEntity<ComponentResponse> createComponent(@Valid @RequestBody ComponentRequest request) {
         ComponentResponse response = componentService.createComponent(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "Component created successfully", response).getData());
     }
@@ -29,7 +30,7 @@ public class ComponentController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ComponentResponse> updateComponent(
             @PathVariable Long id,
-            @RequestBody ComponentRequest request) {
+            @Valid @RequestBody ComponentRequest request) {
         ComponentResponse response = componentService.updateComponent(id, request);
         return ResponseEntity.ok(response);
     }
